@@ -158,8 +158,38 @@ public class GreedyAlgorithms {
     }
 
     //Chocola Problem
-    public static void chocola() {
-        
+    public static void chocola(Integer costVer[], Integer costhor[]) {
+        Arrays.sort(costVer, Collections.reverseOrder());
+        Arrays.sort(costhor, Collections.reverseOrder());
+
+        int h = 0 , v = 0;
+        int hp = 1, vp = 1;
+        int cost = 0;
+
+        while (v < costVer.length && h < costhor.length) {
+            if (costVer[v] <= costhor[h]) { //horizontal cut
+                cost += (vp * costhor[h]);
+                hp++;
+                h++;
+            } else { //vertical cut
+                cost += (hp * costVer[v]);
+                vp++;
+                v++;
+            }
+        }
+
+            while (h < costhor.length) {
+                cost += (vp * costhor[h]);
+                hp++;
+                h++;
+            }
+
+            while (v < costVer.length) {
+                cost += (hp * costVer[v]);
+                vp++;
+                v++;
+            }
+        System.out.println("Minimum cost of cuts = " + cost);
     }
 
     public static void main(String[] args) {
@@ -184,5 +214,9 @@ public class GreedyAlgorithms {
 
 //        int jobsInfo[][] = {{4,20},{1,10},{1,40},{1,30}};
 //        jobSequencing(jobsInfo);
+
+//        Integer costVer[] = {2,1,3,1,4};
+//        Integer costhor[] = {4,1,2};
+//        chocola(costVer, costhor);
     }
 }
