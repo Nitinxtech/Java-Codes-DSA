@@ -1,7 +1,7 @@
 package com.nitin;
 
+import java.util.*;
 import java.util.LinkedList;
-import java.util.Queue;
 
 public class BinaryTrees1 {
 
@@ -199,6 +199,69 @@ public class BinaryTrees1 {
             return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
         }
 
+
+        //Top View Of A Tree
+        static class Information {
+            Node node;
+            int hd;
+
+            public Information(Node node, int hd) {
+                this.node = node;
+                this.hd = hd;
+            }
+        }
+
+        public static void topViewOfTree(Node root) {
+            //Level Order
+            Queue<Information> q = new LinkedList<>();
+            HashMap<Integer, Node> map = new HashMap<>();
+
+            int min=0 , max = 0;
+            q.add(new Information(root, 0));
+
+            while (!q.isEmpty()) {
+                Information curr = q.remove();
+                if (curr == null) {
+                    if (q.isEmpty()) {
+                        break;
+                    } else {
+                        q.add(null);
+                    }
+                } else {
+                    if (!map.containsKey(curr.hd)) { //first time my horizontal distance is occuring
+                        map.put(curr.hd, curr.node);
+                    }
+
+                    if (curr.node.left != null) {
+                        q.add(new Information(curr.node.left, curr.hd-1));
+                        min = Math.min(min,curr.hd-1);
+                    }
+
+                    if (curr.node.right != null) {
+                        q.add(new Information(curr.node.right, curr.hd+1));
+                        max = Math.max(max, curr.hd+1);
+                    }
+                }
+            }
+            for (int i=min; i<=max; i++) {
+                System.out.print(map.get(i).data + " ");
+            }
+            System.out.println();
+        }
+
+        //Print Kth Level Nodes O(n) -> TC
+        public static void printKthLevel(Node root, int level, int k) {
+            if (root == null) {
+                return;
+            }
+            if (level == k) {
+                System.out.print(root.data + " ");
+                return;
+            }
+
+            printKthLevel(root.left, level+1, k);
+            printKthLevel(root.right, level+1, k);
+        }
     }
     public static void main(String[] args) {
 //        int nodes[] = {1,2,4,-1,-1,5,-1,-1,3,-1,6,-1,-1};
@@ -228,5 +291,8 @@ public class BinaryTrees1 {
 //        subRoot.right = new Node(5);
 
 //        System.out.println(BinaryTree.isSubtree(root, subRoot));
+//        BinaryTree.topViewOfTree(root);
+
+        BinaryTree.printKthLevel(root, 1, 2);
     }
 }
